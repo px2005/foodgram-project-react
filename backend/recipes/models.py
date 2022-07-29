@@ -53,7 +53,7 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveIntegerField(
         'Время приготовления',
-        validators=(MinValueValidator(1, 'Время приготовления не может быть меньше минуты!')),
+        validators=(MinValueValidator(1, message='Время приготовления не может быть меньше минуты!'),),
     )
 
     class Meta:
@@ -132,7 +132,7 @@ class ShoppingCart(models.Model):
         verbose_name='Рецепт',
     )
 
-    class Meta
+    class Meta:
         verbose_name = 'Корзина'
         constraints = [
             models.UniqueConstraint(
