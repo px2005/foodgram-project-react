@@ -18,8 +18,8 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField('Название')
-    measurement_unit = models.CharField('Единицы измерения')
+    name = models.CharField('Название', max_length=200,)
+    measurement_unit = models.CharField('Единицы измерения', max_length=200,)
 
     class Meta:
         verbose_name = 'Ингредиент'
@@ -37,7 +37,7 @@ class Recipe(models.Model):
         related_name='recipes',
         verbose_name='Автор',
     )
-    name = models.CharField('Название')
+    name = models.CharField('Название', max_length=200)
     image = models.ImageField('Картинка', upload_to='recipes/',)
     text = models.TextField('Текстовое описание')
     ingredients = models.ManyToManyField(

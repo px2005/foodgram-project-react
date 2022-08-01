@@ -10,6 +10,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS = ['127.0.0.1']
+
 CSRF_TRUSTED_ORIGINS = [
     'http://*localhost',
     'https://*localhost',
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'recipes.apps.RecipesConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
     'djoser',
 ]
