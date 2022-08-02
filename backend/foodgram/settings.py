@@ -2,9 +2,13 @@ import os
 
 from dotenv import load_dotenv
 
+load_dotenv()
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 's^$c9+z9l7da1i2&z%m^^un4@n73c43=d-hw25je)1w%g(wku_'
+SECRET_KEY = os.getenv(
+    'SECRET_KEY', default='s^$c9+z9l7da1i2&z%m^^un4@n73c43=d-hw25je)1w%g(wku_'
+)
 
 DEBUG = True
 
@@ -64,8 +68,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', default='postgres'),
+        'USER': os.getenv('POSTGRES_USER', default='postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT', default='5432')
     }
 }
 
