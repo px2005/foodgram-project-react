@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from users.models import CustomUser, Follow
 
-from ..constants import empty
+from recipes.constants import empty
 
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):

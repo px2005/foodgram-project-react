@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import (Favorite, Ingredient, IngredientAmount, Recipe,
                      ShoppingCart, Tag)
 
-from ..constants import empty
+from .constants import empty
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
