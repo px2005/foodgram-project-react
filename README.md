@@ -73,18 +73,18 @@ docker-compose up -d --build
 
 контейнер базы данных db
 
-контейнер приложения backend
+контейнер приложения web
 
 контейнер web-сервера nginx
 
 Примените миграции:
 
-docker-compose exec backend python manage.py migrate
+docker-compose exec web python manage.py migrate
 
 Создайте администратора:
 
-docker-compose exec backend python manage.py createsuperuser
+docker-compose exec web python manage.py createsuperuser
 
 Соберите статику:
 
-docker-compose exec backend python manage.py collectstatic --noinput
+docker-compose exec web python manage.py collectstatic --noinput
