@@ -14,6 +14,7 @@ Foodgram это сайт, где люди могут публиковать св
 
 Установка проекта локально
 Склонировать репозиторий на локальную машину:
+
 git clone https://github.com/px2005/foodgram-project-react.git
 
 cd foodgram-project-react
