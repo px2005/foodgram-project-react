@@ -2,8 +2,8 @@
 
 Стек технологий
 
-Python Django Django REST Framework PostgreSQL Nginx gunicorn 
-docker GitHub%20Actions Yandex.Cloud
+Python, Django, Django, REST Framework, PostgreSQL, Nginx, gunicorn, 
+docker, GitHub, Yandex.Cloud.
 
 Описание проекта
 
