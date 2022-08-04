@@ -18,8 +18,8 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField('Название', max_length=200,)
-    measurement_unit = models.CharField('Единицы измерения', max_length=200,)
+    name = models.CharField('Название', max_length=200, )
+    measurement_unit = models.CharField('Единицы измерения', max_length=200, )
 
     class Meta:
         verbose_name = 'Ингредиент'
@@ -38,7 +38,7 @@ class Recipe(models.Model):
         verbose_name='Автор',
     )
     name = models.CharField('Название', max_length=200)
-    image = models.ImageField('Картинка', upload_to='recipes/',)
+    image = models.ImageField('Картинка', upload_to='recipes/', )
     text = models.TextField('Текстовое описание')
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -53,7 +53,10 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveIntegerField(
         'Время приготовления',
-        validators=(MinValueValidator(1, message='Время приготовления не может быть меньше минуты!'),),
+        validators=(MinValueValidator(
+            1,
+            message='Время приготовления не может быть меньше минуты!'
+        ),),
     )
 
     class Meta:
@@ -79,7 +82,7 @@ class IngredientAmount(models.Model):
     )
     amount = models.PositiveSmallIntegerField(
         default=1,
-        validators=[MinValueValidator(1)],
+        validators=(MinValueValidator(1, message='Не может быть меньше 1!'),),
     )
 
     class Meta:
@@ -87,7 +90,7 @@ class IngredientAmount(models.Model):
         verbose_name_plural = 'Количество ингредиентов'
         constraints = [
             models.UniqueConstraint(
-                fields=['recipe', 'ingredient'],
+                fields=('recipe', 'ingredient'),
                 name='unique_ingredient',
             )
         ]
@@ -112,7 +115,7 @@ class Favorite(models.Model):
         verbose_name_plural = 'Избранные'
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'recipe'],
+                fields=('user', 'recipe'),
                 name='unique_favorite',
             )
         ]
@@ -136,7 +139,7 @@ class ShoppingCart(models.Model):
         verbose_name = 'Корзина'
         constraints = [
             models.UniqueConstraint(
-                fields=['recipe', 'user'],
+                fields=('recipe', 'user'),
                 name='unique_shopping_cart',
             )
         ]

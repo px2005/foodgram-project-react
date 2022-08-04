@@ -9,17 +9,21 @@ from users.serializers import CustomUserSerializer
 
 
 class TagSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(
+        required=True,
+    )
+    slug = serializers.SlugField()
+
     class Meta:
         model = Tag
-        fields = '__all__'
-        read_only_fields = '__all__',
+        fields = ('id', 'name', 'color', 'slug',)
+        lookup_field = 'slug',
 
 
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = '__all__'
-        read_only_fields = '__all__',
+        fields = ('id', 'name', 'measurement_unit',)
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
@@ -43,7 +47,9 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = '__all__'
+        fields = ('id', 'name', 'tags', 'author', 'ingredients', 'is_favorited',
+                  'is_in_shopping_cart', 'image', 'text', 'cooking_time',
+                  )
 
     def get_ingredients(self, obj):
         queryset = IngredientAmount.objects.filter(recipe=obj)
@@ -83,7 +89,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = (
             'id', 'author', 'ingredients', 'tags', 'image',
-            'name', 'text', 'cooking_time')
+            'name', 'text', 'cooking_time'
+        )
 
     def validate(self, data):
         ingredients = data['ingredients']
@@ -101,7 +108,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                     'amount': 'Количество ингредиента должно быть больше нуля!'
                 })
 
-        tags = data['tags']
+        tags = data.get('tags')
         if not tags:
             raise serializers.ValidationError({
                 'tags': 'Нужно выбрать хотя бы один тэг!'
