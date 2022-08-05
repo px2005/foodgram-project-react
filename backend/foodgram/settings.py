@@ -128,10 +128,12 @@ REST_FRAMEWORK = {
 LOGIN_REDIRECT_URL = '/'
 
 DJOSER = {
+    "LOGIN_FIELD": 'email',
+    "SEND_ACTIVATION_EMAIL": False,
     'HIDE_USERS': False,
     "SERIALIZERS": {
-        "users": "users.serializers.CustomUserSerializer",
         "user_create": "users.serializers.CustomUserCreateSerializer",
+        "users": "users.serializers.CustomUserSerializer",
         "current_user": "users.serializers.CustomUserSerializer",
     },
     'PERMISSIONS': {

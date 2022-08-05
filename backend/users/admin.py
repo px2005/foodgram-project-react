@@ -4,6 +4,7 @@ from users.models import CustomUser, Follow
 
 from recipes.constants import empty
 
+
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name', 'last_name')

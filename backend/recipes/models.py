@@ -96,6 +96,11 @@ class IngredientAmount(models.Model):
         ]
 
 
+class TagsRecipe(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    recipes = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+
 class Favorite(models.Model):
     user = models.ForeignKey(
         CustomUser,
