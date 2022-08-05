@@ -9,15 +9,9 @@ from users.serializers import CustomUserSerializer
 
 
 class TagSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(
-        required=True,
-    )
-    slug = serializers.SlugField()
-
     class Meta:
         model = Tag
         fields = ('id', 'name', 'color', 'slug',)
-        lookup_field = 'slug',
 
 
 class IngredientSerializer(serializers.ModelSerializer):

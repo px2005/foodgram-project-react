@@ -21,20 +21,22 @@ class TagsViewSet(ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = TagSerializer
+    pagination_class = None
 
 
 class IngredientsViewSet(ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = IngredientSerializer
-    filter_backends = [IngredientSearchFilter]
+    filter_backends = (DjangoFilterBackend,)
     search_fields = ('^name',)
+    pagination_class = None
 
 
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     permission_classes = [IsAuthorOrReadOnly]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = (DjangoFilterBackend,)
     filter_class = RecipeFilter
     pagination_class = CustomPageNumberPagination
 
