@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [ip for ip in os.getenv('ALLOWED_HOSTS')]
 
@@ -17,6 +17,8 @@ INTERNAL_IPS = ['127.0.0.1']
 CSRF_TRUSTED_ORIGINS = [
     'http://*localhost',
     'http://*127.0.0.1',
+    'http://px2005.ddns.net',
+    'https://px2005.ddns.net',
     'https://*localhost',
     'https://*127.0.0.1',
 ]

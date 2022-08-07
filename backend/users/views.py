@@ -67,7 +67,7 @@ class FollowViewSet(APIView):
 class FollowListView(ListAPIView):
     serializer_class = FollowSerializer
     permission_classes = [IsAuthenticated]
-    pagination_class = None
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        return CustomUser.objects.filter(user=self.request.user)
+        return CustomUser.objects.filter(followed__user=self.request.user)
