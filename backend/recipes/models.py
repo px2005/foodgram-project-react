@@ -58,8 +58,12 @@ class Recipe(models.Model):
             message='Время приготовления не может быть меньше минуты!'
         ),),
     )
+    pub_date = models.DateTimeField(
+        'Дата публикации', auto_now_add=True, db_index=True
+    )
 
     class Meta:
+        ordering = ('-pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 

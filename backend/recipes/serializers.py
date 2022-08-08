@@ -313,6 +313,39 @@ class ShortRecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image', 'cooking_time')
 
 
+class FavoritedSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(
+        read_only=True, source='recipe.id',
+    )
+    cooking_time = serializers.CharField(
+        read_only=True, source='recipe.cooking_time',
+    )
+    image = serializers.CharField(
+        read_only=True, source='recipe.image',
+    )
+    name = serializers.CharField(
+        read_only=True, source='recipe.name',
+    )
+
+    def validate(self, data):
+        recipe = data['recipe']
+        user = data['user']
+        if user == recipe.author:
+            raise serializers.ValidationError('You are the author!')
+        if (Favorite.objects.filter(recipe=recipe, user=user).exists()):
+            raise serializers.ValidationError('You have already subscribed!')
+        return data
+
+    def create(self, validated_data):
+        favorite = Favorite.objects.create(**validated_data)
+        favorite.save()
+        return favorite
+
+    class Meta:
+        model = Favorite
+        fields = ('id', 'cooking_time', 'name', 'image')
+
+
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
