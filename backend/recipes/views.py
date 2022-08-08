@@ -40,12 +40,12 @@ class RecipeViewSet(ModelViewSet):
     permission_classes = [IsAuthorOrReadOnly]
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipeFilter
-    pagination_class = CustomPageNumberPagination
+    serializer_class = RecipeSerializer
 
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return RecipeListSerializer
-        return RecipeSerializer
+    # def get_serializer_class(self):
+    #     if self.action in ('list', 'retrieve'):
+    #         return RecipeListSerializer
+    #     return RecipeSerializer
 
     @staticmethod
     def post_method_for_actions(request, pk, serializers):
