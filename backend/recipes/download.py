@@ -1,32 +1,41 @@
 from django.http import HttpResponse
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 
-from .models import ShoppingCart
+from recipes.models import IngredientAmount
 
 
 def download_list(request):
-    shopping_cart = ShoppingCart.objects.filter(user=request.user).all()
-    shopping_list = {}
-    for item in shopping_cart:
-        for recipe_ingredient in item.recipe.recipe_ingredients.all():
-            name = recipe_ingredient.ingredient.name
-            measuring_unit = recipe_ingredient.ingredient.measurement_unit
-            amount = recipe_ingredient.amount
-            if name not in shopping_list:
-                shopping_list[name] = {
-                    'name': name,
-                    'measurement_unit': measuring_unit,
-                    'amount': amount
-                }
-            else:
-                shopping_list[name]['amount'] += amount
-    content = (
-        [f'{item["name"]} ({item["measurement_unit"]}) '
-         f'- {item["amount"]}\n'
-         for item in shopping_list.values()]
+    final_list = {}
+    ingredients = IngredientAmount.objects.filter(
+        recipe__shopping_cart__user=request.user).values_list(
+        'ingredient__name', 'ingredient__measurement_unit',
+        'amount'
     )
-    filename = 'shopping_list.txt'
-    response = HttpResponse(content, content_type='text/plain')
-    response['Content-Disposition'] = (
-        'attachment; filename={0}'.format(filename)
-    )
+    for item in ingredients:
+        name = item[0]
+        if name not in final_list:
+            final_list[name] = {
+                'measurement_unit': item[1],
+                'amount': item[2]
+            }
+        else:
+            final_list[name]['amount'] += item[2]
+    pdfmetrics.registerFont(
+        TTFont('Handicraft', 'data/Handicraft.ttf', 'UTF-8'))
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = ('attachment; '
+                                       'filename="shopping_list.pdf"')
+    page = canvas.Canvas(response)
+    page.setFont('Handicraft', size=24)
+    page.drawString(200, 800, 'Список покупок')
+    page.setFont('Handicraft', size=16)
+    height = 750
+    for i, (name, data) in enumerate(final_list.items(), 1):
+        page.drawString(75, height, (f'{i}. {name} - {data["amount"]} '
+                                     f'{data["measurement_unit"]}'))
+        height -= 25
+    page.showPage()
+    page.save()
     return response
