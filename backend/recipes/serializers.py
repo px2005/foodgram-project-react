@@ -128,7 +128,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
     ingredients = IngredientsRecipeSerializer(
-        many=True, source='recipe_ingredients'
+        many=True, source='amounts'
     )
     image = Base64ImageField(
         max_length=None, use_url=True,
@@ -167,7 +167,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         context = self.context['request']
-        ingredients = validated_data.pop('recipe_ingredients')
+        ingredients = validated_data.pop('amounts')
         try:
             recipe = Recipe.objects.create(
                 **validated_data,
@@ -193,7 +193,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         context = self.context['request']
-        ingredients = validated_data.pop('recipe_ingredients')
+        ingredients = validated_data.pop('amounts')
         tags_set = context.data['tags']
         recipe = instance
         instance.name = validated_data.get('name', instance.name)
