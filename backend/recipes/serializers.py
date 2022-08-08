@@ -6,13 +6,10 @@ from rest_framework import serializers
 
 from recipes.models import (Favorite, Ingredient,
                             IngredientAmount, Recipe,
-                            ShoppingCart, Tag,
+                            ShoppingCart, Tag, TagsRecipe
                             )
 from users.serializers import CustomUserSerializer
 from users.models import CustomUser
-
-from .models import (FavoriteRecipe, Ingredient, IngredientsRecipe, Recipe,
-                     ShoppingCart, Tag, TagsRecipe)
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -44,7 +41,7 @@ class IngredientsRecipeSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = IngredientsRecipe
+        model = IngredientAmount
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
@@ -155,7 +152,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             user = self.context.get('user')
         callname_function = format(traceback.extract_stack()[-2][2])
         if callname_function == 'get_is_favorited':
-            init_queryset = FavoriteRecipe.objects.filter(recipe=data.id, user=user)
+            init_queryset = Favorite.objects.filter(recipe=data.id, user=user)
         elif callname_function == 'get_is_in_shopping_cart':
             init_queryset = ShoppingCart.objects.filter(recipe=data, user=user)
         if init_queryset.exists():
@@ -187,7 +184,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredients_set = context.data['ingredients']
         for ingredient in ingredients_set:
             ingredient_model = Ingredient.objects.get(id=ingredient['id'])
-            IngredientsRecipe.objects.create(
+            IngredientAmount.objects.create(
                 recipe=recipe,
                 ingredient=ingredient_model,
                 amount=ingredient['amount'],
@@ -207,11 +204,11 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.image = validated_data.get('image', instance.image)
         instance.save()
         instance.tags.set(tags_set)
-        IngredientsRecipe.objects.filter(recipe=instance).delete()
+        IngredientAmount.objects.filter(recipe=instance).delete()
         ingredients_req = context.data['ingredients']
         for ingredient in ingredients_req:
             ingredient_model = Ingredient.objects.get(id=ingredient['id'])
-            IngredientsRecipe.objects.create(
+            IngredientAmount.objects.create(
                 recipe=recipe,
                 ingredient=ingredient_model,
                 amount=ingredient['amount'],
