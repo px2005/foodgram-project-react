@@ -42,7 +42,7 @@ class RecipeAdmin(admin.ModelAdmin):
     readonly_fields = ['count_recipes_favorite']
 
     def count_recipes_favorite(self, obj):
-        return obj.favorite_recipes.count()
+        return obj.favorites.count()
 
     count_recipes_favorite.short_description = 'Популярность'
 
