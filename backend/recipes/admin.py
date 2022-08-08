@@ -6,14 +6,14 @@ from .models import (Favorite, Ingredient, IngredientAmount, Recipe,
 from .constants import Empty
 
 
-class IngredientsInline(admin.TabularInline):
-    model = IngredientAmount
-    extra = 1
-
-
-class TagsInline(admin.TabularInline):
-    model = TagsRecipe
-    extra = 1
+# class IngredientsInline(admin.TabularInline):
+#     model = IngredientAmount
+#     extra = 1
+#
+#
+# class TagsInline(admin.TabularInline):
+#     model = TagsRecipe
+#     extra = 1
 
 
 @admin.register(Tag)
@@ -32,37 +32,36 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author', 'count_recipes_favorite')
-    list_filter = ('name', 'author', 'tags')
-    search_fields = ('name', 'author', 'tags')
-    empty_value_display = Empty
-    inlines = [
-        TagsInline, IngredientsInline
-    ]
-    readonly_fields = ['count_recipes_favorite']
-
-    def count_recipes_favorite(self, obj):
-        return obj.favorites.count()
-
-    count_recipes_favorite.short_description = 'Популярность'
-
-    # list_display = ('id', 'name', 'author', 'amount_favorites',
-    #                 'amount_tags', 'amount_ingredients')
-    # list_filter = ('author', 'name', 'tags')
-    # search_fields = ('name',)
+    # list_display = ('name', 'author', 'count_recipes_favorite')
+    # list_filter = ('name', 'author', 'tags')
+    # search_fields = ('name', 'author', 'tags')
     # empty_value_display = Empty
+    # inlines = [
+    #     TagsInline, IngredientsInline
+    # ]
+    # readonly_fields = ['count_recipes_favorite']
     #
-    # @staticmethod
-    # def amount_favorites(obj):
+    # def count_recipes_favorite(self, obj):
     #     return obj.favorites.count()
     #
-    # @staticmethod
-    # def amount_tags(obj):
-    #     return "\n".join([i[0] for i in obj.tags.values_list('name')])
-    #
-    # @staticmethod
-    # def amount_ingredients(obj):
-    #     return "\n".join([i[0] for i in obj.ingredients.values_list('name')])
+    # count_recipes_favorite.short_description = 'Популярность'
+    list_display = ('id', 'name', 'author', 'amount_favorites',
+                    'amount_tags', 'amount_ingredients')
+    list_filter = ('author', 'name', 'tags')
+    search_fields = ('name',)
+    empty_value_display = Empty
+
+    @staticmethod
+    def amount_favorites(obj):
+        return obj.favorites.count()
+
+    @staticmethod
+    def amount_tags(obj):
+        return "\n".join([i[0] for i in obj.tags.values_list('name')])
+
+    @staticmethod
+    def amount_ingredients(obj):
+        return "\n".join([i[0] for i in obj.ingredients.values_list('name')])
 
 
 @admin.register(IngredientAmount)
