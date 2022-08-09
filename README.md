@@ -1,5 +1,14 @@
 # FOODGRAM - Продуктовый помощник
 
+server: http://62.84.122.171
+http://px2005.ddns.net
+
+Пользователи:
+E-mail: admin2@foodgram.com
+Password: Asdfgh456
+E-mail:: user@foodgram.com
+Password: Zxcvbn456
+
 Стек технологий
 
 Python, Django, Django, REST Framework, PostgreSQL, Nginx, gunicorn,
