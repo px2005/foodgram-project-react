@@ -115,7 +115,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         context = self.context['request']
-        ingredients = validated_data.pop('recipe_ingredients')
+        ingredients = validated_data.pop('amounts')
         try:
             recipe = Recipe.objects.create(
                 **validated_data,
@@ -132,7 +132,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredients_set = context.data['ingredients']
         for ingredient in ingredients_set:
             ingredient_model = Ingredient.objects.get(id=ingredient['id'])
-            IngredientsRecipe.objects.create(
+            IngredientAmount.objects.create(
                 recipe=recipe,
                 ingredient=ingredient_model,
                 amount=ingredient['amount'],
