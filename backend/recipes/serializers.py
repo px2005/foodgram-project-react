@@ -170,12 +170,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         return response
 
 
-class ShortRecipeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
-
-
 class FavoritedSerializer(serializers.ModelSerializer):
     id = serializers.CharField(
         read_only=True, source='recipe.id',
@@ -209,36 +203,24 @@ class FavoritedSerializer(serializers.ModelSerializer):
         fields = ('id', 'cooking_time', 'name', 'image')
 
 
-class FavoriteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Favorite
-        fields = ('user', 'recipe')
-
-    def validate(self, data):
-        request = self.context.get('request')
-        if not request or request.user.is_anonymous:
-            return False
-        recipe = data['recipe']
-        if Favorite.objects.filter(user=request.user, recipe=recipe).exists():
-            raise serializers.ValidationError({
-                'status': 'Рецепт уже есть в избранном!'
-            })
-        return data
-
-    def to_representation(self, instance):
-        request = self.context.get('request')
-        context = {'request': request}
-        return ShortRecipeSerializer(
-            instance.recipe, context=context).data
-
-
 class ShoppingCartSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(
+        read_only=True,
+        source='recipe.id',
+    )
+    cooking_time = serializers.CharField(
+        read_only=True,
+        source='recipe.cooking_time',
+    )
+    image = serializers.CharField(
+        read_only=True,
+        source='recipe.image',
+    )
+    name = serializers.CharField(
+        read_only=True,
+        source='recipe.name',
+    )
+
     class Meta:
         model = ShoppingCart
-        fields = ('user', 'recipe')
-
-    def to_representation(self, instance):
-        request = self.context.get('request')
-        context = {'request': request}
-        return ShortRecipeSerializer(
-            instance.recipe, context=context).data
+        fields = ('id', 'cooking_time', 'name', 'image')

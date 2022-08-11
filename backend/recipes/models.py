@@ -10,8 +10,15 @@ class Tag(models.Model):
     slug = models.SlugField('Slug', max_length=150, unique=True)
 
     class Meta:
+        ordering = ('slug',)
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['slug'],
+                name='unique_slug'
+            )
+        ]
 
     def __str__(self):
         return self.name
@@ -47,7 +54,7 @@ class Recipe(models.Model):
         verbose_name='Ингредиенты',
     )
     tags = models.ManyToManyField(
-        Tag,
+        Tag, through='TagsRecipe',
         related_name='recipes',
         verbose_name='Tags',
     )
@@ -109,7 +116,7 @@ class Favorite(models.Model):
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        related_name='favorites_user',
+        related_name='favorites',
         verbose_name='Пользователь',
     )
     recipe = models.ForeignKey(

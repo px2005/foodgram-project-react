@@ -1,9 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
+from rest_framework import filters, status
 from rest_framework.decorators import action
-from rest_framework.permissions import (AllowAny,
-                                        IsAuthenticated,
+from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly
                                         )
 from rest_framework.response import Response
@@ -17,22 +16,6 @@ from .serializers import (FavoritedSerializer, IngredientSerializer,
                           RecipeSerializer, ShoppingCartSerializer,
                           TagSerializer)
 from .download import download_list
-
-
-class TagsViewSet(ReadOnlyModelViewSet):
-    queryset = Tag.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = TagSerializer
-    pagination_class = None
-
-
-class IngredientsViewSet(ReadOnlyModelViewSet):
-    queryset = Ingredient.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = IngredientSerializer
-    filter_backends = (DjangoFilterBackend,)
-    search_fields = ('^name',)
-    pagination_class = None
 
 
 class RecipeViewSet(ModelViewSet):
@@ -105,3 +88,20 @@ class RecipeViewSet(ModelViewSet):
             return download_list(request)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class TagsViewSet(ReadOnlyModelViewSet):
+    queryset = Tag.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = TagSerializer
+    pagination_class = None
+
+
+class IngredientsViewSet(ReadOnlyModelViewSet):
+    queryset = Ingredient.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = IngredientSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('^name',)
+    pagination_class = None
+

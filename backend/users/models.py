@@ -4,7 +4,7 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'password', 'first_name']
+    REQUIRED_FIELDS = ['username', 'password', 'first_name', 'last_name']
     ADMIN = 'admin'
     USER = 'user'
     ROLES = [
@@ -23,6 +23,7 @@ class CustomUser(AbstractUser):
         return self.role == self.ADMIN
 
     class Meta:
+        ordering = ['-id']
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
