@@ -100,3 +100,8 @@ docker-compose exec web python manage.py createsuperuser
 Соберите статику:
 
 docker-compose exec web python manage.py collectstatic --noinput
+
+### Авторы
+Александр Горыничев
+
+px2005@yandex.ru
