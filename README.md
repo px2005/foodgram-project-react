@@ -1,105 +1,50 @@
-# FOODGRAM - Продуктовый помощник
-
-server: http://62.84.122.171
-http://px2005.ddns.net
-
-Пользователи:
-E-mail: admin2@foodgram.com
-Password: Asdfgh456
-E-mail:: user@foodgram.com
-Password: Zxcvbn456
-
-Стек технологий
-
-Python, Django, Django, REST Framework, PostgreSQL, Nginx, gunicorn,
-docker, GitHub, Yandex.Cloud.
-
-Описание проекта
+# Foodgram - «Продуктовый помощник»
 
 Foodgram это сайт, где люди могут публиковать свои рецепты, узнать рецепты 
 других пользователей, подписываться на интересных авторов, 
 добавлять лучшие рецепты в избранное,
 а также создавать список покупок и загружать его в pdf формате
 
-Установка проекта локально
-Склонировать репозиторий на локальную машину:
 
-git clone https://github.com/px2005/foodgram-project-react.git
+## Стек технологий
 
-cd foodgram-project-react
+[![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
+[![Django REST Framework](https://img.shields.io/badge/-Django%20REST%20Framework-464646?style=flat-square&logo=Django%20REST%20Framework)](https://www.django-rest-framework.org/)
+[![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-464646?style=flat-square&logo=PostgreSQL)](https://www.postgresql.org/)
+[![Nginx](https://img.shields.io/badge/-NGINX-464646?style=flat-square&logo=NGINX)](https://nginx.org/ru/)
+[![gunicorn](https://img.shields.io/badge/-gunicorn-464646?style=flat-square&logo=gunicorn)](https://gunicorn.org/)
+[![docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
+[![Yandex.Cloud](https://img.shields.io/badge/-Yandex.Cloud-464646?style=flat-square&logo=Yandex.Cloud)](https://cloud.yandex.ru/)
 
-Cоздать и активировать виртуальное окружение:
 
-python -m venv env
-
-source env/bin/activate
-
-Cоздайте файл .env в директории /infra/ с содержанием:
-
+# Запуск и работа с проектом
+Чтобы развернуть проект, вам потребуется:
+1) Клонировать репозиторий git clone https://github.com/px2005/foodgram-project-react.git
+2) Создать файл ```.env``` в папке проекта _/infra/_ и заполнить его всеми ключами:
+```
 DB_ENGINE=django.db.backends.postgresql
-
 DB_NAME=postgres
-
 POSTGRES_USER=postgres
-
 POSTGRES_PASSWORD=postgres
-
 DB_HOST=db
-
 DB_PORT=5432
-
-SECRET_KEY='xxxxxxxx'
-
-ALLOWED_HOSTS=['*', 'web', '62.84.122.171', '127.0.0.1']
-
-
-Перейти в директирию и установить зависимости из файла requirements.txt:
-
-cd backend/
-
-pip install -r requirements.txt
-
-Выполните миграции:
-
-python manage.py migrate
-
-Запустите сервер:
-
-python manage.py runserver
-
-Запуск проекта в Docker контейнере
-
-Установите Docker.
-
-Параметры запуска описаны в файлах docker-compose.yml и nginx.conf,
-
-которые находятся в директории infra/.
-
-При необходимости добавьте/измените адреса проекта в файле nginx.conf
-
-Запустите docker compose:
-
+DJANGO_SECRET_KEY=<ваш_django_secret_key>
+```
+3) Собрать контейнеры:
+```python
+cd foodgram-project-react/infra
 docker-compose up -d --build
-
-После сборки появляются 3 контейнера:
-
-контейнер базы данных db
-
-контейнер приложения web
-
-контейнер web-сервера nginx
-
-Примените миграции:
-
-docker-compose exec web python manage.py migrate
-
-Создайте администратора:
-
+```
+4) Сделать миграции, собрать статику и создать суперпользователя:
+```python
+docker-compose exec -T web python manage.py makemigrations users --noinput
+docker-compose exec -T web python manage.py makemigrations recipes --noinput
+docker-compose exec -T web python manage.py migrate --noinput
+docker-compose exec -T web python manage.py collectstatic --no-input
 docker-compose exec web python manage.py createsuperuser
+```
 
-Соберите статику:
-
-docker-compose exec web python manage.py collectstatic --noinput
 
 ### Авторы
 Александр Горыничев
